@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --primary-color: #152A74; /* cyan */
+  --secondary-color: #2762DA; /* blue */
+  --button-bg: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  --text-color: #ffffff;
+}
+
+.nrml-btn {
+    background-color: var(--primary-color);
+}

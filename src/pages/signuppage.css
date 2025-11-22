@@ -1,0 +1,35 @@
+.signup-page{
+    display: flex;
+  flex-direction: column;
+  align-items:center;
+  font-family: 'Poppins', sans-serif;
+  color: #1a2a44;
+}
+.logo{
+    width: 150px;
+   
+    
+  margin-top: 0px;
+  margin-right: 1200px;
+
+} 
+h2{
+   margin-top: 20px;
+   margin-right: 600px;
+  font-weight: 600;
+} 
+.Signup_container{
+    display: flex;
+  justify-content: center;
+  padding: 40px;
+  border-radius: 12px;
+  
+}
+.login-text{
+
+  margin-right: 500px;
+ 
+}
+.login-text a{
+  color: rgb(117, 121, 125);
+}

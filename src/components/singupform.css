@@ -1,0 +1,63 @@
+.signup-form{
+
+    display: flex;
+    gap: 160px;
+}
+.left,
+.right{
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+}
+input
+ {
+  width: 340px;
+  height: 35px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+.terms{
+   
+  
+  display: flex;
+  gap: 8px;
+ font-size: 15px;
+
+}
+.terms input{
+  width: 15px;
+
+}
+.signup-btn {
+  background-color: #1a2a44;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  width: 120px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+.signup-btn:hover {
+  background-color: #274168;
+}
+.role-input select {
+  width: 358px;
+  height: 55px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+
+
+} 
+.right input,
+.right select {
+    color: #69696e;
+}
+.left input,
+.left select {
+    color: #69696e;}
+
