@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DashEtud from "../components/dashEtud.jsx";
 import Calendar from "../components/calendar.jsx";
-
 import {
   Bell,
   User,
@@ -13,15 +12,14 @@ import {
 } from "lucide-react";
 
 export const dashboard = () => {
-  const [activePage, setActivePage] = useState("home"); // 👈 controls content + active icon
+  const [activePage, setActivePage] = useState("home"); // content control
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // sidebar open/close
 
-  // icon styles
   const iconClasses = (page) =>
     page === activePage
       ? "p-2 bg-white rounded-full text-[#0C1B4D]"
       : "p-2 text-white";
 
-  // 👇 the content that changes based on sidebar
   const renderContent = () => {
     switch (activePage) {
       case "home":
@@ -36,64 +34,67 @@ export const dashboard = () => {
   return (
     <div className="flex h-screen w-full bg-[#0C1B4D]">
       {/* Sidebar */}
-      <div className="w-28 text-white flex flex-col items-center py-4 gap-8">
-        <button>
+      <div
+        className={`${
+          isSidebarOpen ? "w-28" : "w-16"
+        } text-white flex flex-col items-center py-4 gap-8 transition-all duration-300`}
+      >
+        {/* Menu */}
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="mb-4"
+        >
           <Menu size={32} className="text-white" />
         </button>
 
-        <ul className="flex flex-col gap-3">
+        {/* Only show icons if sidebar open */}
+        {isSidebarOpen && (
+          <ul className="flex flex-col gap-3">
+            <li onClick={() => setActivePage("home")} className="cursor-pointer">
+              <div className={iconClasses("home")}>
+                <Home size={22} />
+              </div>
+            </li>
 
-          {/* HOME */}
-          <li
-            onClick={() => setActivePage("home")}
-            className="cursor-pointer"
-          >
-            <div className={iconClasses("home")}>
-              <Home size={22} />
-            </div>
-          </li>
+            <li onClick={() => setActivePage("user")} className="cursor-pointer">
+              <div className={iconClasses("user")}>
+                <User size={22} />
+              </div>
+            </li>
 
-          {/* USER */}
-          <li
-            onClick={() => setActivePage("user")}
-            className="cursor-pointer"
-          >
-            <div className={iconClasses("user")}>
-              <User size={22} />
-            </div>
-          </li>
+            <li
+              onClick={() => setActivePage("calendar")}
+              className="cursor-pointer"
+            >
+              <div className={iconClasses("calendar")}>
+                <CalendarDays size={22} />
+              </div>
+            </li>
 
-          {/* CALENDAR */}
-          <li
-            onClick={() => setActivePage("calendar")}
-            className="cursor-pointer"
-          >
-            <div className={iconClasses("calendar")}>
-              <CalendarDays size={22} />
-            </div>
-          </li>
+            <li
+              onClick={() => setActivePage("settings")}
+              className="cursor-pointer"
+            >
+              <div className={iconClasses("settings")}>
+                <Settings size={22} />
+              </div>
+            </li>
+          </ul>
+        )}
 
-          {/* SETTINGS */}
-          <li
-            onClick={() => setActivePage("settings")}
-            className="cursor-pointer"
-          >
-            <div className={iconClasses("settings")}>
-              <Settings size={22} />
-            </div>
-          </li>
-
-        </ul>
-
-        <div className="mt-auto cursor-pointer">
-          <button className="p-2 text-white">
-            <LogOut size={28} />
-          </button>
-        </div>
+        {/* Logout */}
+        {isSidebarOpen && (
+          <div className="mt-auto cursor-pointer">
+            <button className="p-2 text-white">
+              <LogOut size={28} />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Body */}
-      <div className="w-full m-4 p-8 bg-[#EEF0FF] rounded-3xl overflow-auto">
+      <div className="w-full m-4 p-8 bg-[#EEF0FF] rounded-3xl overflow-auto transition-all duration-300">
+        {/* Header */}
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold m-1 ml-8">Dashboard</h1>
 
@@ -113,7 +114,7 @@ export const dashboard = () => {
           </div>
         </div>
 
-        {/* 👇 THIS is where the page switches */}
+        {/* Page Content */}
         {renderContent()}
       </div>
     </div>
