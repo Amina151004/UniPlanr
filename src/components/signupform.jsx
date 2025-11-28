@@ -62,7 +62,7 @@ return (
          <p>  I accept all the terms and conditions</p> 
         </label>
 
-        <button type="submit" className="signup-btn">Sign Up</button>
+        <button onClick={() => navigate('/home')} type="submit" className="signup-btn">Sign Up</button>
   </div>
   
 

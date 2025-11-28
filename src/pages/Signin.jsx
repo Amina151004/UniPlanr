@@ -111,6 +111,7 @@ className="w-32 h-24 object-contain"          />
           <button
             type="submit"
             disabled={isLoading}
+            onClick={() => navigate('/home')}
             className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (

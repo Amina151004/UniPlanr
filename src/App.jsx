@@ -6,6 +6,7 @@ import Signup_page from "./pages/signuppage.jsx";
 import Signin from "./pages/Signin.jsx";
 import { Welcomepg } from "./pages/Welcomepg.jsx";
 import { Routes, Route } from 'react-router-dom';
+import Dashboard from "./pages/dashboard.jsx";
 
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
       <Route path="*" element={<Welcomepg />} />
       <Route path="/login" element={<Signin />} />
       <Route path="/signup" element={<Signup_page />} />
-    </Routes>
+      <Route path="/home" element={<Dashboard />} />
+    </Routes> 
+    
     </>
   );
 }

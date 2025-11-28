@@ -1,11 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+      }
+    }
 :root {
   --primary-color: #152A74; /* cyan */
   --secondary-color: #2762DA; /* blue */
   --button-bg: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   --text-color: #ffffff;
+}
+h1, h2, h3, h4, h5, h6,p,span {
+  font-family: "Inter", sans-serif;
+    color: #0A152D;
 }
 
 .nrml-btn {
