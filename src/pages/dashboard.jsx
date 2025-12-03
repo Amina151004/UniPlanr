@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import DashEtud from "../components/dashEtud.jsx";
 import Calendar from "../components/calendar.jsx";
+import Chefdepartement from "./Chefdepartement.jsx";
+import ChefProfile from "./Chefprofile.jsx";
+
 import {
   Bell,
   User,
@@ -12,7 +15,7 @@ import {
 } from "lucide-react";
 
 export const dashboard = () => {
-  const [activePage, setActivePage] = useState("home"); // content control
+  const [activePage, setActivePage] = useState("Chefdartement"); // content control
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // sidebar open/close
 
   const iconClasses = (page) =>
@@ -26,6 +29,10 @@ export const dashboard = () => {
         return <DashEtud />;
       case "calendar":
         return <Calendar />;
+      case "Chefdepartement":
+        return <Chefdepartement />;
+      case "Chefprofile":
+        return <ChefProfile />;
       default:
         return <DashEtud />;
     }
@@ -115,7 +122,8 @@ export const dashboard = () => {
         </div>
 
         {/* Page Content */}
-        {renderContent()}
+        { renderContent() }
+
       </div>
     </div>
   );

@@ -7,6 +7,8 @@ import Signin from "./pages/Signin.jsx";
 import { Welcomepg } from "./pages/Welcomepg.jsx";
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "./pages/dashboard.jsx";
+import Chefdepartement from "./pages/Chefdepartement.jsx";
+import ChefProfile from "./pages/Chefprofile.jsx";  
 
 
 function App() {
@@ -17,8 +19,9 @@ function App() {
       <Route path="/login" element={<Signin />} />
       <Route path="/signup" element={<Signup_page />} />
       <Route path="/home" element={<Dashboard />} />
-    </Routes> 
-    
+      <Route path="/Chefdepartement" element={<Chefdepartement />} />
+      <Route path="/chefprofile" element={<ChefProfile />} />
+    </Routes>
     </>
   );
 }
