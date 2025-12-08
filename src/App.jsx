@@ -7,14 +7,15 @@ import Signin from "./pages/Signin.jsx";
 import { Welcomepg } from "./pages/Welcomepg.jsx";
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "./pages/dashboard.jsx";
-import Chefdepartement from "./pages/Chefdepartement.jsx";
+import Chefdepartement from "./components/Chefdepartement.jsx";
 import ChefProfile from "./pages/Chefprofile.jsx";  
-
+import { AuthProvider } from "/src/context/AuthContext.jsx";
 
 function App() {
   return (
     <>
-    <Routes>
+    <AuthProvider>
+      <Routes>
       <Route path="*" element={<Welcomepg />} />
       <Route path="/login" element={<Signin />} />
       <Route path="/signup" element={<Signup_page />} />
@@ -22,6 +23,8 @@ function App() {
       <Route path="/Chefdepartement" element={<Chefdepartement />} />
       <Route path="/chefprofile" element={<ChefProfile />} />
     </Routes>
+    </AuthProvider>
+    
     </>
   );
 }

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import DashEtud from "../components/dashEtud.jsx";
 import Calendar from "../components/calendar.jsx";
-import Chefdepartement from "./Chefdepartement.jsx";
+import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
+import Etuprofile from "./Etuprofile.jsx";
+import { useAuth } from "/src/context/AuthContext.jsx";
 
 import {
   Bell,
@@ -15,6 +17,7 @@ import {
 } from "lucide-react";
 
 export const dashboard = () => {
+  const { user } = useAuth();
   const [activePage, setActivePage] = useState("Chefdartement"); // content control
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // sidebar open/close
 
@@ -24,17 +27,73 @@ export const dashboard = () => {
       : "p-2 text-white";
 
   const renderContent = () => {
-    switch (activePage) {
-      case "home":
-        return <DashEtud />;
-      case "calendar":
-        return <Calendar />;
-      case "Chefdepartement":
-        return <Chefdepartement />;
-      case "Chefprofile":
-        return <ChefProfile />;
+    switch (user.role) {
+      case "etudiant":
+        switch (activePage) {
+          case "home":
+            return <DashEtud />;
+          case "grades":
+            return <div>Mes Notes - Étudiant</div>;
+          case "profile":
+            return <Etuprofile/>;
+          case "settings":
+            return <div>Settings Étudiant</div>;
+          case "calendar":
+            return <Calendar />;
+          default:
+            return <DashEtud />;
+        }
+
+      case "enseignant":
+        switch (activePage) {
+          case "home":
+            return <div>Dashboard Enseignant</div>;
+          case "classes":
+            return <div>Mes Classes</div>;
+          case "profile":
+            return <div>Profile Enseignant</div>;
+          case "settings":
+            return <div>Settings Enseignant</div>;
+          case "calendar":
+            return <Calendar />;
+          default:
+            return <div>Dashboard Enseignant</div>;
+        }
+
+      case "chef_departement":
+        switch (activePage) {
+          case "home":
+            return <Chefdepartement />;
+          case "profile":
+            return <ChefProfile />;
+          case "department":
+            return <div>Gestion Département</div>;
+          case "settings":
+            return <div>Settings Chef</div>;
+          case "calendar":
+            return <Calendar />;
+          default:
+            return <Chefdepartement />;
+        }
+
+      case "responsable_planning":
+        switch (activePage) {
+          case "home":
+            return <div>Dashboard Planning</div>;
+          case "schedules":
+            return <div>Gestion des Plannings</div>;
+          case "profile":
+            return <div>Profile Responsable</div>;
+          case "settings":
+            return <div>Settings Planning</div>;
+          case "calendar":
+            return <Calendar />;
+          default:
+            return <div>Dashboard Planning</div>;
+        }
+
       default:
-        return <DashEtud />;
+        return <div>Role non reconnu</div>;
     }
   };
 
@@ -63,8 +122,8 @@ export const dashboard = () => {
               </div>
             </li>
 
-            <li onClick={() => setActivePage("user")} className="cursor-pointer">
-              <div className={iconClasses("user")}>
+            <li onClick={() => setActivePage("profile")} className="cursor-pointer">
+              <div className={iconClasses("profile")}>
                 <User size={22} />
               </div>
             </li>
