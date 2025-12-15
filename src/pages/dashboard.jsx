@@ -5,6 +5,7 @@ import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
 import Etuprofile from "./Etuprofile.jsx";
 import { useAuth } from "/src/context/AuthContext.jsx";
+import TeacherDashbord from "./TeacherDashboard.jsx";
 
 import {
   Bell,
@@ -47,11 +48,11 @@ export const dashboard = () => {
       case "enseignant":
         switch (activePage) {
           case "home":
-            return <div>Dashboard Enseignant</div>;
+            return <TeacherDashbord />;
           case "classes":
             return <div>Mes Classes</div>;
           case "profile":
-            return <div>Profile Enseignant</div>;
+            return <TeacherDashbord />;
           case "settings":
             return <div>Settings Enseignant</div>;
           case "calendar":

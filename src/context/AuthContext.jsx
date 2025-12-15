@@ -12,7 +12,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   // SET THE CURRENT ROLE HERE - Just change this variable!
-  const CURRENT_ROLE = 'etudiant'; 
+  const CURRENT_ROLE = 'enseignant'; 
   // Options: 'etudiant', 'enseignant', 'chef_departement', 'responsable_planning'
   
   const [user] = useState({
