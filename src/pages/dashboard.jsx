@@ -7,6 +7,7 @@ import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
 import Etuprofile from "./Etuprofile.jsx";
 import { useAuth } from "/src/context/AuthContext.jsx";
+import TeacherDashbord from "./TeacherDashboard.jsx";
 import ExamDashboard from "./ExamDashboard.jsx";
 import Setting from "./settings.jsx";
 
