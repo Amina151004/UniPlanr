@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '/src/context/AuthContext.jsx';
+
+// Configure axios
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
 
 export default function Signin() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get login function from context
+  
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [motdepasse, setMotdepasse] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -19,10 +32,10 @@ export default function Signin() {
       newErrors.email = 'Email is invalid';
     }
     
-    if (!password) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    if (!motdepasse) {
+      newErrors.motdepasse = 'Password is required';
+    } else if (motdepasse.length < 6) {
+      newErrors.motdepasse = 'Password must be at least 6 characters';
     }
     
     setErrors(newErrors);
@@ -37,12 +50,48 @@ export default function Signin() {
     }
     
     setIsLoading(true);
+    setErrors({});
     
-    setTimeout(() => {
-      console.log('Login attempt:', { email, password, rememberMe });
-      alert('Login successful! (This is a demo)');
+    try {
+      console.log('Attempting login with:', { email });
+      
+      const response = await api.post('/login', {
+        email,
+        motdepasse,
+      });
+
+      console.log('Login successful:', response.data);
+
+      // Use the login function from context to store user data
+      login(response.data.user, response.data.token);
+
+      // Set default authorization header for future requests
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
+      alert('Login successful!');
+      navigate('/home');
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      console.error('Error response:', error.response?.data);
+      
+      if (error.response?.status === 422) {
+        const backendErrors = error.response.data.errors || {};
+        setErrors(backendErrors);
+        
+        // Show error message
+        const errorMessages = Object.entries(backendErrors)
+          .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages[0] : messages}`)
+          .join('\n');
+        
+        alert(`Login failed:\n\n${errorMessages}`);
+      } else {
+        setErrors({ general: error.response?.data?.message || 'Login failed. Please try again.' });
+        alert(error.response?.data?.message || 'Login failed. Please try again.');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -52,12 +101,19 @@ export default function Signin() {
           <img 
             src="src/assets/logo.png" 
             alt="School Logo" 
-className="w-32 h-24 object-contain"          />
+            className="w-32 h-24 object-contain"
+          />
         </div>
 
         <h2 className="w-full font-inter font-bold text-[32px] leading-[100%] tracking-[0%] text-center text-[#0F224B] mb-8">
           Welcome Back!
         </h2>
+
+        {errors.general && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {errors.general}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -70,30 +126,34 @@ className="w-32 h-24 object-contain"          />
                 errors.email ? 'border-red-500' : 'border-gray-200'
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all`}
               placeholder="Email"
+              required
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {Array.isArray(errors.email) ? errors.email[0] : errors.email}
+              </p>
             )}
           </div>
 
-          {/* Password Input */}
           <div>
             <input
-              id="password"
+              id="motdepasse"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={motdepasse}
+              onChange={(e) => setMotdepasse(e.target.value)}
               className={`w-full px-4 py-3 bg-gray-50 border ${
-                errors.password ? 'border-red-500' : 'border-gray-200'
+                errors.motdepasse ? 'border-red-500' : 'border-gray-200'
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all`}
               placeholder="Password"
+              required
             />
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            {errors.motdepasse && (
+              <p className="mt-1 text-sm text-red-500">
+                {Array.isArray(errors.motdepasse) ? errors.motdepasse[0] : errors.motdepasse}
+              </p>
             )}
           </div>
 
-          {/* Remember Me Checkbox */}
           <div className="flex items-center">
             <input
               id="remember"
@@ -107,11 +167,9 @@ className="w-32 h-24 object-contain"          />
             </label>
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             disabled={isLoading}
-            onClick={() => navigate('/home')}
             className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
@@ -127,7 +185,6 @@ className="w-32 h-24 object-contain"          />
             )}
           </button>
 
-          {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600 mt-8">
             You don't have an account?{' '}
             <a href="#" onClick={() => navigate('/signup')} className="text-blue-900 hover:text-blue-700 font-semibold transition-colors">
@@ -139,4 +196,3 @@ className="w-32 h-24 object-contain"          />
     </div>
   );
 }
-

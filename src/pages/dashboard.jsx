@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import DashEtud from "../components/dashEtud.jsx";
 import Calendar from "../components/calendar.jsx";
 import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
 import Etuprofile from "./Etuprofile.jsx";
 import { useAuth } from "/src/context/AuthContext.jsx";
+import ExamDashboard from "./ExamDashboard.jsx";
+import Setting from "./settings.jsx";
 
 import {
   Bell,
@@ -16,76 +20,131 @@ import {
   LogOut,
 } from "lucide-react";
 
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
+
 export const dashboard = () => {
-  const { user } = useAuth();
-  const [activePage, setActivePage] = useState("Chefdartement"); // content control
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // sidebar open/close
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [activePage, setActivePage] = useState("home");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const iconClasses = (page) =>
     page === activePage
       ? "p-2 bg-white rounded-full text-[#0C1B4D]"
       : "p-2 text-white";
 
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        // Set authorization header
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        // Call logout endpoint
+        await api.post('/logout');
+      }
+      
+      // Clear local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userRole');
+      
+      // Call logout from context (if available)
+      if (logout) {
+        logout();
+      }
+      
+      // Redirect to login page
+      navigate('/login');
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      
+      // Even if API call fails, clear local data and redirect
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userRole');
+      
+      if (logout) {
+        logout();
+      }
+      
+      navigate('/login');
+    }
+  };
+
+  const pageTitles = {
+  home: "Dashboard",
+  profile: "Profile",
+  calendar: "Calendar",
+  settings: "Settings"
+};
+
+
   const renderContent = () => {
-    switch (user.role) {
+    switch (user?.role) {
+      case "Étudiant":
       case "etudiant":
         switch (activePage) {
           case "home":
             return <DashEtud />;
-          case "grades":
-            return <div>Mes Notes - Étudiant</div>;
           case "profile":
             return <Etuprofile/>;
           case "settings":
-            return <div>Settings Étudiant</div>;
+            return <Setting />;
           case "calendar":
             return <Calendar />;
           default:
             return <DashEtud />;
         }
 
+      case "Enseignant":
       case "enseignant":
         switch (activePage) {
           case "home":
-            return <div>Dashboard Enseignant</div>;
-          case "classes":
-            return <div>Mes Classes</div>;
+            return <ExamDashboard/>;
           case "profile":
-            return <div>Profile Enseignant</div>;
+            return <TeacherDashbord />;;
           case "settings":
-            return <div>Settings Enseignant</div>;
+            return <Setting />;
           case "calendar":
             return <Calendar />;
           default:
-            return <div>Dashboard Enseignant</div>;
+            return <ExamDashboard/>;;
         }
 
+      case "Chef":
       case "chef_departement":
         switch (activePage) {
           case "home":
             return <Chefdepartement />;
           case "profile":
             return <ChefProfile />;
-          case "department":
-            return <div>Gestion Département</div>;
           case "settings":
-            return <div>Settings Chef</div>;
+            return <Setting />;
           case "calendar":
             return <Calendar />;
           default:
             return <Chefdepartement />;
         }
 
+      case "Responsable":
       case "responsable_planning":
         switch (activePage) {
           case "home":
             return <div>Dashboard Planning</div>;
-          case "schedules":
-            return <div>Gestion des Plannings</div>;
           case "profile":
             return <div>Profile Responsable</div>;
           case "settings":
-            return <div>Settings Planning</div>;
+            return <Setting />;
           case "calendar":
             return <Calendar />;
           default:
@@ -151,7 +210,11 @@ export const dashboard = () => {
         {/* Logout */}
         {isSidebarOpen && (
           <div className="mt-auto cursor-pointer">
-            <button className="p-2 text-white">
+            <button 
+              onClick={handleLogout}
+              className="p-2 text-white hover:bg-white rounded-full transition-colors"
+              title="Logout"
+            >
               <LogOut size={28} />
             </button>
           </div>
@@ -162,27 +225,32 @@ export const dashboard = () => {
       <div className="w-full m-4 p-8 bg-[#EEF0FF] rounded-3xl overflow-auto transition-all duration-300">
         {/* Header */}
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold m-1 ml-8">Dashboard</h1>
+          <h1 className="text-2xl font-bold m-1 ml-8">{pageTitles[activePage]}</h1>
 
           <div className="flex items-center gap-4">
             <button>
               <Bell size={26} className="text-[#0C1B4D]" />
             </button>
 
-            <div className="flex items-center gap-2 m-1">
+            <div className="flex items-center gap-2">
               <img
-                src="src/assets/user.png"
-                className="h-10 w-10 rounded-full"
-                alt="profile"
-              />
-              <span className="font-medium text-base">Username</span>
+  src={
+    user?.profile_picture && user.profile_picture !== 'user.png'
+      ? `http://localhost:8000/storage/${user.profile_picture}`
+      : 'src/assets/user.png'
+  }
+  className="h-10 w-10 rounded-full"
+  alt="profile"
+/>
+              <span className="font-medium text-base">
+                {user?.prenom} {user?.nom}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Page Content */}
-        { renderContent() }
-
+        {renderContent()}
       </div>
     </div>
   );
