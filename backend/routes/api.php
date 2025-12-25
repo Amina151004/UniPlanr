@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\API\StudentProfileController;
 use App\Http\Controllers\API\UserSettingsController;
 use App\Http\Controllers\API\ExamenFilesController;
+use App\Http\Controllers\API\CalendarController;
+use App\Http\Controllers\API\StudentDashboardController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -31,9 +33,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/profile', [UserSettingsController::class, 'updateProfile']);
     Route::put('/user/password', [UserSettingsController::class, 'updatePassword']);
     Route::post('/user/profile-picture', [UserSettingsController::class, 'uploadProfilePicture']);
+
+    // Student Dashboard routes
+    Route::get('/student/dashboard', [StudentDashboardController::class, 'getDashboardData']);
+    Route::get('/student/exams/module/{moduleId}', [StudentDashboardController::class, 'getExamsByModule']);
+
+    Route::get('/users/role/{role}', [UserController::class, 'getUsersByRole']);
+    Route::get('/teachers/module/{moduleId}', [UserController::class, 'getTeachersByModule']);
     
     // Users Routes
     Route::apiResource('users', UserController::class);
+
+    Route::get('/calendar/events', [CalendarController::class, 'getEvents']);
+    Route::get('/calendar/events/range', [CalendarController::class, 'getEventsByDateRange']);
     
     // Examens Routes
     Route::apiResource('examens', ExamenController::class);

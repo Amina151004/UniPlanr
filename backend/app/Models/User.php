@@ -24,7 +24,8 @@ class User extends Authenticatable
     'motdepasse',
     'profile_picture', // ← Add this
     'id_sessionexamen',
-    'id_groupe'
+    'id_groupe',
+    'id_module', // Add this
 ];
 
     protected $hidden = [
@@ -56,5 +57,9 @@ class User extends Authenticatable
     public function sessionExamen()
     {
         return $this->belongsTo(SessionExamen::class, 'id_sessionexamen', 'id_sessionexamen');
+    }
+    public function module()
+    {
+        return $this->belongsTo(Module::class, 'id_module', 'id_module');
     }
 }

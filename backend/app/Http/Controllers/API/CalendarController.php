@@ -84,15 +84,6 @@ class CalendarController extends Controller
                 'module.nom_module',
                 'salle.num_salle'
             )
-            ->groupBy(
-                'examen.id_examen',
-                'examen.type',
-                'examen.date',
-                'examen.heure_debut',
-                'examen.heure_fin',
-                'module.nom_module',
-                'salle.num_salle'
-            )
             ->get();
 
         return $this->transformExamsToEvents($exams);

@@ -29,9 +29,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // TEMPORARILY COMMENT OUT
-      // localStorage.removeItem('token');
-      // localStorage.removeItem('user');
-      // window.location.href = '/login';
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
       
       console.error('401 Error - Token invalid:', localStorage.getItem('token'));
     }
