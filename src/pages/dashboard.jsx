@@ -6,10 +6,16 @@ import Calendar from "../components/calendar.jsx";
 import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
 import Etuprofile from "./Etuprofile.jsx";
-import { useAuth } from "/src/context/AuthContext.jsx";
+/*import { useAuth } from "/src/context/AuthContext.jsx";*/
 import TeacherDashbord from "./TeacherDashboard.jsx";
 import ExamDashboard from "./ExamDashboard.jsx";
 import Setting from "./settings.jsx";
+import Responsabledash from "./responsabledash.jsx";
+
+
+ import Salleajout from '../pages/salleajout.jsx'
+ 
+
 
 import {
   Bell,
@@ -139,7 +145,7 @@ export const dashboard = () => {
       case "responsable_planning":
         switch (activePage) {
           case "home":
-            return <div>Dashboard Planning</div>;
+            return <Responsabledash />;
           case "profile":
             return <div>Profile Responsable</div>;
           case "settings":
