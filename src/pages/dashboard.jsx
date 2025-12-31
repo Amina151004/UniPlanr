@@ -4,8 +4,14 @@ import Calendar from "../components/calendar.jsx";
 import Chefdepartement from "../components/Chefdepartement.jsx";
 import ChefProfile from "./Chefprofile.jsx";
 import Etuprofile from "./Etuprofile.jsx";
-import { useAuth } from "/src/context/AuthContext.jsx";
+/*import { useAuth } from "/src/context/AuthContext.jsx";*/
 import TeacherDashbord from "./TeacherDashboard.jsx";
+import Responsabledash from "./responsabledash.jsx";
+
+
+ import Salleajout from '../pages/salleajout.jsx'
+ 
+
 
 import {
   Bell,
@@ -17,18 +23,22 @@ import {
   LogOut,
 } from "lucide-react";
 
-export const dashboard = () => {
-  const { user } = useAuth();
-  const [activePage, setActivePage] = useState("Chefdartement"); // content control
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // sidebar open/close
+
+
+export const Dashboard = () => {
+ /* const { user } = useAuth();*/
+  const [activePage, setActivePage] = useState("home"); // content control
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+   // sidebar open/close
+   
 
   const iconClasses = (page) =>
     page === activePage
       ? "p-2 bg-white rounded-full text-[#0C1B4D]"
       : "p-2 text-white";
 
-  const renderContent = () => {
-    switch (user.role) {
+  /*const renderContent = () => {
+    switch (User.role) {
       case "etudiant":
         switch (activePage) {
           case "home":
@@ -80,7 +90,7 @@ export const dashboard = () => {
       case "responsable_planning":
         switch (activePage) {
           case "home":
-            return <div>Dashboard Planning</div>;
+            return <Responsabledash/>
           case "schedules":
             return <div>Gestion des Plannings</div>;
           case "profile":
@@ -96,7 +106,7 @@ export const dashboard = () => {
       default:
         return <div>Role non reconnu</div>;
     }
-  };
+  };*/
 
   return (
     <div className="flex h-screen w-full bg-[#0C1B4D]">
@@ -182,11 +192,16 @@ export const dashboard = () => {
         </div>
 
         {/* Page Content */}
-        { renderContent() }
+        {/* renderContent() */}
+        <Responsabledash/>
+        
+       
+        
+        
 
       </div>
     </div>
   );
 };
 
-export default dashboard;
+export default Dashboard;
