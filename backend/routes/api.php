@@ -23,6 +23,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Auth routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+
+    // Semester routes
+    Route::get('/semesters', [SemesterController::class, 'index']);
+    Route::get('/semesters/active', [SemesterController::class, 'getActive']);
+    Route::get('/semesters/{id}', [SemesterController::class, 'show']);
+    Route::post('/semesters', [SemesterController::class, 'store']);
+    Route::put('/semesters/{id}', [SemesterController::class, 'update']);
+    Route::delete('/semesters/{id}', [SemesterController::class, 'destroy']);
+    Route::post('/semesters/{id}/activate', [SemesterController::class, 'setActive']);
     
     // Student Profile routes - MOVE THESE INSIDE!
     Route::get('/student/profile', [StudentProfileController::class, 'getProfile']);

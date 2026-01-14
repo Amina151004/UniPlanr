@@ -75,9 +75,16 @@ class StudentProfileController extends Controller
                     ->get();
             }
 
+            // Get active semester
+            $activeSemester = DB::table('semester')
+                ->where('est_actif', true)
+                ->select('id_semester', 'numero_semester', 'annee_universitaire', 'est_actif')
+                ->first();
+
             return response()->json([
                 'student' => $studentInfo,
                 'exams' => $exams,
+                'semester' => $activeSemester,
                 'total_exams' => count($exams)
             ], 200);
 

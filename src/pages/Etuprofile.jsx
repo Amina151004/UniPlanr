@@ -7,6 +7,7 @@ export const Etuprofile = () => {
   const { user, token, loading: authLoading } = useAuth();
   const [profileData, setProfileData] = useState(null);
   const [exams, setExams] = useState([]);
+  const [semester, setSemester] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -38,6 +39,7 @@ export const Etuprofile = () => {
       
       setProfileData(response.data.student);
       setExams(response.data.exams);
+      setSemester(response.data.semester);
       setError(null);
       
     } catch (err) {
@@ -175,7 +177,7 @@ export const Etuprofile = () => {
               </h1>
               <p className='text-gray-600'>Exams Schedule</p>
             </div>
-            <span className='text-gray-500'>2024-2025</span>
+            <span className='text-gray-500'>{semester?.annee_universitaire || '2024-2025'}</span>
           </div>
 
           {/* Exams List */}
